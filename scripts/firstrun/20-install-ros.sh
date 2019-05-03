@@ -21,3 +21,5 @@ sudo -u turtle rosdep update
 sudo -u turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/driving_swarm
 
 apt install install ros-kinetic-rosserial-python ros-kinetic-tf
+
+rosrun turtlebot3_bringup create_udev_rules
