@@ -1,4 +1,4 @@
-#!/usr/bin/env /bin/sh
+#!/usr/bin/env bash
 
 mkdir -p /var/log/firstrun/
 
