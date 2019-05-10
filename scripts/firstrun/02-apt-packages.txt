@@ -1,0 +1,9 @@
+vim 
+htop
+iftop
+git
+openssh-server
+build-essential
+tmux
+curl
+wget
