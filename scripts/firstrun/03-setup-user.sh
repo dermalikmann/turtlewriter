@@ -5,5 +5,5 @@
 userdel -r ubuntu || true
 userdel -r turtle || true
 
-useradd -m -G dialout,tty,adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare turtle
-echo "turtle" | chpasswd turtle
+useradd -m -G tty,adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,lxd,netdev turtle
+echo "turtle:turtle" | chpasswd
