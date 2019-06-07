@@ -9,18 +9,15 @@ current_hostname_id = 1
 current_hostname = ""
 
 def new_hostname():
+    global current_hostname
     current_hostname = get_hostname()
-    save_hostname(current_hostname)
 
 def get_hostname():
+    global current_hostname_id
+    global hostname_prefix
     new_hostname = hostname_prefix + str(current_hostname_id)
     current_hostname_id = current_hostname_id + 1
     return new_hostname
-
-def save_hostname(hostname):
-    with open('turtles.txt', 'a+') as f:
-        f.write('%s\n',hostname)
-    f.close()
 
 if os.getuid() != 0:
     print('Please run this scipt as root/with sudo.')
@@ -32,16 +29,14 @@ disk_image_offset = ''
 
 if base_image_path == '':
     base_image_path = './base.img'
-    while disk_image_offset == '':
-        print('\r')
-        disk_image_offset = int(input('Please enter the partition offset (sector count x sector size): ', end=''))
+    disk_image_offset = int(input('Please enter the partition offset (sector count x sector size) [269484032]: ') or 269484032)
 
 print('Preparing image... ', end='')
 
-subprocess.run(['mkdir', ' -p', tmp_mount_point])
-subprocess.run(['mount', '-o', 'loop,offset=' + disk_image_offset, base_image_path, tmp_mount_point])
+subprocess.run(['mkdir', '-p', tmp_mount_point])
+subprocess.run(['mount', '-o', 'loop,offset=' + str(disk_image_offset), base_image_path, tmp_mount_point])
 
-subprocess.run(['cp', '-rf',
+subprocess.run(['cp', '-rf', '--preserve=mode', 
             scriptdir + '/scripts/firstrun.sh',
             tmp_mount_point + '/etc/init.d/'])
 
@@ -49,20 +44,21 @@ subprocess.run(['cp', '-rf',
             scriptdir + '/scripts/firstrun/',
             tmp_mount_point + '/etc/init.d/'])
 
-subprocess.run(['cp', '-rf',
-            scriptdir + '/conf/*',
+subprocess.run(['rsync', '-a',
+            scriptdir + '/conf/',
             tmp_mount_point + '/'])
 
 print('Done')
 
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
-current_hostname_id = int(input('Please enter witch ID should be started with [1]:') or 1)
+current_hostname_id = int(input('Please enter witch ID should be started with [1]: ') or 1)
 
-for x in range(current_hostname_id + 1):
+for x in range(count):
 
-    device_id = str(input('Please new insert SD card and enter device identifier [/dev/mmcblk0]') or '/dev/mmcblk0')
+    device_id = str(input('Please new insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
+    subprocess.run(['sync'])
 
-    print('Wrinting hostname... ', end='')
+    print('Writing hostname... ', end='')
     new_hostname()
     with open(tmp_mount_point + '/etc/hostname', 'w+') as f:
         f.write(current_hostname + '\n')
@@ -83,6 +79,6 @@ for x in range(current_hostname_id + 1):
     print('Done')
 
     print('Writing to card. Please wait... ', end='')
-    subprocess.run(['dd', '', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M', ' >& /dev/null'])
+    subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'])
     subprocess.run(['sync'])
     print('Done')
