@@ -1,0 +1,10 @@
+[Unit]
+Description=Turtlebot Setup service
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/firstrun/main.sh
+
+[Install]
+WantedBy=multi-user.target

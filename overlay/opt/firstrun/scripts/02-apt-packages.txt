@@ -1,0 +1,15 @@
+vim 
+htop
+iftop
+git
+openssh-server
+build-essential
+tmux
+curl
+wget
+distcc
+distcc-pump
+ccache
+distccmon-gnome
+python-pip
+python-catkin-tools
