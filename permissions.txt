@@ -1,0 +1,4 @@
+664 root: /opt/firstrun
++x root: /opt/firstrun/main.sh
+644 root: /etc/systemd/system/firstrun.service
+755 root: /etc/systemd/system/multi-user.target.wants
