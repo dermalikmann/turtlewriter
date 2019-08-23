@@ -9,7 +9,7 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key $KEY
 
 apt update >> /opt/firstrun/apt.log
 
-apt install -y ros-melodic-ros-base python-rosinstall python-rosinstall-generator python-wstool  >> /opt/firstrun/apt.log
+apt install -y ros-melodic-ros-base python-rosinstall python-rosinstall-generator python-wstool python-catkin-tools  >> /opt/firstrun/apt.log
 
 echo "source /opt/ros/melodic/setup.bash" >> /home/turtle/.bashrc
 echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
