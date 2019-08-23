@@ -4,6 +4,8 @@ iftop
 git
 openssh-server
 build-essential
+gcc-arm-linux-gnueabihf
+g++-arm-linux-gnueabihf
 tmux
 curl
 wget
