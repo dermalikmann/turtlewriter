@@ -17,10 +17,13 @@ echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
 chown turtle:turtle /home/turtle/.bashrc
 chown turtle:turtle /home/turtle/.zshrc
 
-sudo -u rosdep init
+sudo -u turle rosdep init
 sudo -u turtle rosdep update
-sudo -u turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/driving_swarm
+sudo -u turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/DrivingSwarm
+sudo -u turtle rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
 
-xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
+#xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
+
+rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
 
 sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
