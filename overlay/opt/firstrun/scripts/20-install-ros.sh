@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
 echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+KEY=C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
-sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 || \
-	sudo apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 || \
-	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key $KEY || \
+sudo apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-key $KEY || \
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key $KEY
 
-apt update
+apt update >> /opt/firstrun/apt.log
 
-apt install sudo apt install ros-melodic-ros-base python-rosinstall python-rosinstall-generator python-wstool
+apt install -y ros-melodic-ros-base python-rosinstall python-rosinstall-generator python-wstool  >> /opt/firstrun/apt.log
 
 echo "source /opt/ros/melodic/setup.bash" >> /home/turtle/.bashrc
 echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
@@ -16,10 +17,10 @@ echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
 chown turtle:turtle /home/turtle/.bashrc
 chown turtle:turtle /home/turtle/.zshrc
 
-rosdep init
+sudo -u rosdep init
 sudo -u turtle rosdep update
 sudo -u turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/driving_swarm
 
-sudo apt install install ros-kinetic-rosserial-python ros-kinetic-tf ros-melodic-navigation 
+apt install -y ros-melodic-rosserial-python ros-melodic-tf ros-melodic-navigation >> /opt/firstrun/apt.log
 
-rosrun turtlebot3_bringup create_udev_rules
+sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
