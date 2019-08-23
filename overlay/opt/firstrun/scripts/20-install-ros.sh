@@ -21,6 +21,6 @@ sudo -u rosdep init
 sudo -u turtle rosdep update
 sudo -u turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/driving_swarm
 
-apt install -y ros-melodic-rosserial-python ros-melodic-tf ros-melodic-navigation >> /opt/firstrun/apt.log
+xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
 
 sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
