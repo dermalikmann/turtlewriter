@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-xargs pip3 install >> /opt/firstrun/pip.log < /opt/firstrun/scripts/15-pip-packages.txt
+pip3 install -r /opt/firstrun/scripts/15-pip-packages.txt >> /opt/firstrun/pip.log 
