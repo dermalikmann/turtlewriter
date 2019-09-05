@@ -28,44 +28,56 @@ if base_image_path == '':
     base_image_path = './base.img'
     disk_image_offset = int(input('Please enter the partition offset (sector count x sector size) [269484032]: ') or 269484032)
 
-print('Preparing image...')
-
-print('    Mounting image... ')
+print('Mounting image... ', end='')
 
 subprocess.run(['mkdir', '-p', tmp_mount_point])
 subprocess.run(['mount', '-o', 'loop,offset=' + str(disk_image_offset), base_image_path, tmp_mount_point])
 
-
-print('    Copying overlay... ')
-
-subprocess.run(['rsync', '-a',
-            scriptdir + '/overlay/',
-            tmp_mount_point + '/'])
-
-print('    Setting file permissions...')
-
-with open('permissions.txt', 'r') as permfile:
-    line = permfile.readline().strip()
-    while line:
-        print('        ' + line)
-        exit
-        permission, owner, path = line.split(' ')
-        subprocess.run(['chmod', '-R', permission, tmp_mount_point + path])
-        subprocess.run(['chown', '-R', owner, tmp_mount_point + path])
-        line = permfile.readline().strip()
-
-
-print('Preparation done')
+print('Done')
 
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
 current_hostname_id = int(input('Please enter witch ID should be started with [1]: ') or 1)
 
+print()
+print('Flashing...')
+
+device_id = str(input('Please new insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
+subprocess.run(['sync'])
+
 for x in range(count):
 
-    device_id = str(input('Please new insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
-    subprocess.run(['sync'])
+    print('    Writing basimage... ', end='')
+    sys.stdout.flush()
+    with open(os.devnull, 'w') as devnull:
+        subprocess.run(['sync'])
+        subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'], stdout=devnull, stderr=devnull)
+        #subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'])
+        subprocess.run(['sync'])
+    print('Done')
 
-    print('Writing hostname... ', end='')
+    subprocess.run(['umount', tmp_mount_point])
+
+    subprocess.run(['mount', device_id + 'p2' if 'mmcblk' in device_id else device_id + '2', tmp_mount_point])
+
+    print('    Copying overlay... ')
+
+    subprocess.run(['rsync', '-a',
+                scriptdir + '/overlay/',
+                tmp_mount_point + '/'])
+
+    print('    Setting file permissions...')
+
+    with open('permissions.txt', 'r') as permfile:
+        line = permfile.readline().strip()
+        while line:
+            print('        ' + line)
+            exit
+            permission, owner, path = line.split(' ')
+            subprocess.run(['chmod', '-R', permission, tmp_mount_point + path])
+            subprocess.run(['chown', '-R', owner, tmp_mount_point + path])
+            line = permfile.readline().strip()
+
+    print('    Writing hostname... ', end='')
     with open(tmp_mount_point + '/etc/hostname', 'w+') as f:
         f.write(current_hostname + '\n')
         f.close()
@@ -84,15 +96,5 @@ for x in range(count):
 
     print('Done')
 
-    print('Writing to card. Please wait... ', end='')
-    sys.stdout.flush()
-    with open(os.devnull, 'w') as devnull:
-        subprocess.run(['sync'])
-        subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'], stdout=devnull, stderr=devnull)
-        #subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'])
-        subprocess.run(['sync'])
-    print('Done')
-
     new_hostname()
-
-subprocess.run(['umount', tmp_mount_point])
+    input('Please insert new sd card and press <ENTER>')
