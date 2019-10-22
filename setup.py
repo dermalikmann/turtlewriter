@@ -21,7 +21,8 @@ if os.getuid() != 0:
     sys.exit(2)
 
 base_image_path = str(input('Enter the path to the base image [./base.img]: '))
-tmp_mount_point = str(input('Enter the temporary mount point [/tmp/trutlewriter]: ') or '/tmp/turtlewriter')
+#tmp_mount_point = str(input('Enter the temporary mount point [/tmp/trutlewriter]: ') or '/tmp/turtlewriter')
+tmp_mount_point = subprocess.check_output('mktemp', shell=True).decode("UTF-8").rstrip()
 
 if base_image_path == '':
     base_image_path = './base.img'
