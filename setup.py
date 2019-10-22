@@ -21,27 +21,19 @@ if os.getuid() != 0:
     sys.exit(2)
 
 base_image_path = str(input('Enter the path to the base image [./base.img]: '))
-tmp_mount_point = str(input('Enter the temporary mount point [/tmp/trutlewriter]: ') or '/tmp/turtlewriter')
-disk_image_offset = ''
+#tmp_mount_point = str(input('Enter the temporary mount point [/tmp/trutlewriter]: ') or '/tmp/turtlewriter')
+tmp_mount_point = subprocess.check_output('mktemp -d', shell=True).decode("UTF-8").rstrip()
 
 if base_image_path == '':
     base_image_path = './base.img'
-    disk_image_offset = int(input('Please enter the partition offset (sector count x sector size) [269484032]: ') or 269484032)
-
-print('Mounting image... ', end='')
-
-subprocess.run(['mkdir', '-p', tmp_mount_point])
-subprocess.run(['mount', '-o', 'loop,offset=' + str(disk_image_offset), base_image_path, tmp_mount_point])
-
-print('Done')
 
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
-current_hostname_id = int(input('Please enter witch ID should be started with [1]: ') or 1)
+current_hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
 
 print()
 print('Flashing...')
 
-device_id = str(input('Please new insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
+device_id = str(input('Please insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
 subprocess.run(['sync'])
 
 for x in range(count):
@@ -54,9 +46,7 @@ for x in range(count):
         #subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'])
         subprocess.run(['sync'])
     print('Done')
-
-    subprocess.run(['umount', tmp_mount_point])
-
+    
     subprocess.run(['mount', device_id + 'p2' if 'mmcblk' in device_id else device_id + '2', tmp_mount_point])
 
     print('    Copying overlay... ')
@@ -71,7 +61,6 @@ for x in range(count):
         line = permfile.readline().strip()
         while line:
             print('        ' + line)
-            exit
             permission, owner, path = line.split(' ')
             subprocess.run(['chmod', '-R', permission, tmp_mount_point + path])
             subprocess.run(['chown', '-R', owner, tmp_mount_point + path])
@@ -86,6 +75,7 @@ for x in range(count):
         f.write('127.0.0.1  localhost\n')
         f.write('127.0.1.1  ' + current_hostname + '\n')
         f.write('\n')
+
         f.write('# The following lines are desirable for IPv6 capable hosts\n')
         f.write('::1     ip6-localhost ip6-loopback\n')
         f.write('fe00::0 ip6-localnet\n')
