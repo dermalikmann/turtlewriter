@@ -5,4 +5,5 @@ ros-melodic-navigation
 ros-melodic-robot-upstart
 ros-melodic-urdf
 ros-melodic-xarco
+ros-melodic-multimaster-launch
 ros-melodic-multimaster-fkie

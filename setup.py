@@ -6,15 +6,15 @@ import subprocess
 scriptdir = str(os.path.dirname(os.path.realpath(__file__)))
 
 hostname_prefix = "turtlebot" 
-current_hostname_id = 0
+hostname_id = 1
 current_hostname = ""
 
 def new_hostname():
     global current_hostname
-    global current_hostname_id
+    global hostname_id
     global hostname_prefix
-    current_hostname_id = current_hostname_id + 1
-    current_hostname = hostname_prefix + str(current_hostname_id)
+    current_hostname = hostname_prefix + str(hostname_id)
+    hostname_id = hostname_id + 1
 
 if os.getuid() != 0:
     print('Please run this scipt as root/with sudo.')
@@ -28,7 +28,7 @@ if base_image_path == '':
     base_image_path = './base.img'
 
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
-current_hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
+hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
 
 print()
 print('Flashing...')
@@ -66,7 +66,7 @@ for x in range(count):
             subprocess.run(['chown', '-R', owner, tmp_mount_point + path])
             line = permfile.readline().strip()
 
-    print('    Writing hostname... ', end='')
+    print('    Writing new hostname \'' + current_hostname + '\'... ', end='')
     with open(tmp_mount_point + '/etc/hostname', 'w+') as f:
         f.write(current_hostname + '\n')
         f.close()
