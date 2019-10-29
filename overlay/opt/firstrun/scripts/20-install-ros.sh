@@ -28,4 +28,7 @@ rosdep install --rosdistro melodic --from-paths /home/turtle/DrivingSwarm/src --
 
 #rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
 
+HOME=/home/turtle/ bash -c "source /opt/ros/melodic/setup.bash && source ~/DrivingSwarm/devel/setup.bash && rosrun robot_upstart install core/launch/turtlebot_bootup.launch"
+sudo systemctl daemon-reload && sudo systemctl start core
+
 #sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
