@@ -11,19 +11,21 @@ apt update >> /opt/firstrun/apt.log
 
 apt install -y ros-melodic-ros-base python-rosinstall python-rosinstall-generator python-wstool python-catkin-tools  >> /opt/firstrun/apt.log
 
-echo "source /opt/ros/melodic/setup.bash" >> /home/turtle/.bashrc
-echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
+#echo "source /opt/ros/melodic/setup.bash" >> /home/turtle/.bashrc
+#echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
+
+cp /opt/firstrun/scripts/20-bashrc.txt /home/turtle/.bashrc
 
 chown turtle:turtle /home/turtle/.bashrc
 chown turtle:turtle /home/turtle/.zshrc
 
-sudo -u turle rosdep init
-sudo -u turtle rosdep update
-sudo -u turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/DrivingSwarm
-sudo -u turtle rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
+sudo rosdep init
+sudo -Hu turtle rosdep update
+sudo -Hu turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/DrivingSwarm
+rosdep install --rosdistro melodic --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
 
 #xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
 
-rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
+#rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
 
-sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
+#sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
