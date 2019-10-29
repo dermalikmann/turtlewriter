@@ -2,3 +2,6 @@ ros-melodic-rosserial-python
 ros-melodic-tf
 ros-melodic-tf2
 ros-melodic-navigation
+ros-melodic-robot-upstart
+ros-melodic-urdf
+ros-melodic-xarco

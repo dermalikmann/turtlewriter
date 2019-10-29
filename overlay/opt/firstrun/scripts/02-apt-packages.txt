@@ -20,3 +20,5 @@ python3-skimage
 python
 python-pip
 python-numpy
+gcc-7-arm-linux-gnueabihf
+gcc-7-arm-linux-gnueabihf
