@@ -36,7 +36,11 @@ print('Flashing...')
 device_id = str(input('Please insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
 subprocess.run(['sync'])
 
+
 for x in range(count):
+    new_hostname()
+
+    input('Please insert new sd card and press <ENTER>')
 
     print('    Writing basimage... ', end='')
     sys.stdout.flush()
@@ -85,6 +89,3 @@ for x in range(count):
         f.close()
 
     print('Done')
-
-    new_hostname()
-    input('Please insert new sd card and press <ENTER>')

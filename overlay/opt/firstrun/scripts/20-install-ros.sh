@@ -14,8 +14,6 @@ apt install -y ros-melodic-ros-base python-rosinstall python-rosinstall-generato
 #echo "source /opt/ros/melodic/setup.bash" >> /home/turtle/.bashrc
 #echo "source /opt/ros/melodic/setup.zsh" >> /home/turtle/.zshrc
 
-cp /opt/firstrun/scripts/20-bashrc.txt /home/turtle/.bashrc
-
 chown turtle:turtle /home/turtle/.bashrc
 chown turtle:turtle /home/turtle/.zshrc
 
@@ -26,7 +24,7 @@ rosdep install --rosdistro melodic --from-paths /home/turtle/DrivingSwarm/src --
 
 #xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
 
-#rosdep install --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
+#sudo -Hu 
 
 HOME=/home/turtle/ bash -c "source /opt/ros/melodic/setup.bash && source ~/DrivingSwarm/devel/setup.bash && rosrun robot_upstart install core/launch/turtlebot_bootup.launch"
 sudo systemctl daemon-reload && sudo systemctl start core
