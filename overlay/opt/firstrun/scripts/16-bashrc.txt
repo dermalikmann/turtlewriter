@@ -126,7 +126,7 @@ alias cm='cd ~/DrivingSwarm && catkin_make'
 # ROS-SPECIFIC STUFF
 source /opt/ros/melodic/setup.bash
 source ~/DrivingSwarm/devel/setup.bash
-export ROS_MASTER_URI=http://10.61.7.231:11311
+export ROS_MASTER_URI=http://<<<HOSTNAME>>>:11311
 export ROS_HOSTNAME=turtlebot1
 export TURTLEBOT3_MODEL=burger
 export ROS_LOG_DIR=/home/turtle/.ros/log
