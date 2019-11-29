@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import time
 
 scriptdir = str(os.path.dirname(os.path.realpath(__file__)))
 
@@ -50,7 +51,11 @@ for x in range(count):
         #subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'])
         subprocess.run(['sync'])
     print('Done')
+
+    subprocess.run(['partprobe'])
     
+    time.sleep(1)
+
     subprocess.run(['mount', device_id + 'p2' if 'mmcblk' in device_id else device_id + '2', tmp_mount_point])
 
     print('    Copying overlay... ')

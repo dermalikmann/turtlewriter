@@ -7,3 +7,5 @@ ros-melodic-urdf
 ros-melodic-xacro
 ros-melodic-multimaster-launch
 ros-melodic-multimaster-fkie
+ros-melodic-angels
+ros-melodic-mapserver
