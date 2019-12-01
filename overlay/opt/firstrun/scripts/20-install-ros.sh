@@ -20,13 +20,10 @@ chown turtle:turtle /home/turtle/.zshrc
 sudo rosdep init
 sudo -Hu turtle rosdep update
 sudo -Hu turtle git clone --recurse-submodules -j8 https://github.com/ovgu-FINken/DrivingSwarm /home/turtle/DrivingSwarm
-rosdep install --rosdistro melodic --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
+sudo -Hu turtle rosdep install --rosdistro melodic --from-paths /home/turtle/DrivingSwarm/src --ignore-src -r -y
 
-#xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
+xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
 
-#sudo -Hu 
-
-HOME=/home/turtle/ bash -c "source /opt/ros/melodic/setup.bash && source ~/DrivingSwarm/devel/setup.bash && rosrun robot_upstart install core/launch/turtlebot_bootup.launch"
-sudo systemctl daemon-reload && sudo systemctl start core
+test -f /opt/firstrun/scripts/nobuildnoinstall || sudo -Hu turtle /opt/firstrun/buildandinstall.sh
 
 #sudo -u turtle rosrun turtlebot3_bringup create_udev_rules

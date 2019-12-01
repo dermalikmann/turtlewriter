@@ -21,6 +21,4 @@ python
 libbullet-dev
 python-pip
 python-numpy
-libc6-dev
-gcc-7-arm-linux-gnueabihf
-g++-7-arm-linux-gnueabihf
+libc6-arm*

@@ -28,6 +28,7 @@ tmp_mount_point = subprocess.check_output('mktemp -d', shell=True).decode("UTF-8
 if base_image_path == '':
     base_image_path = './base.img'
 
+build = int(input('Should be the project be build on first boot? (0|1) [1]') or 1)
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
 hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
 
@@ -65,6 +66,10 @@ for x in range(count):
                 tmp_mount_point + '/'])
 
     print('    Setting file permissions...')
+
+    if build == 1:
+        with (tmp_mount_point + '/opt/firstrun/scripts/nobuildnoinstall', 'w') as bf:
+            bf.write('1')
 
     with open('permissions.txt', 'r') as permfile:
         line = permfile.readline().strip()
