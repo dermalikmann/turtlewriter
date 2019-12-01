@@ -5,7 +5,6 @@ ros-melodic-navigation
 ros-melodic-robot-upstart
 ros-melodic-urdf
 ros-melodic-xacro
-ros-melodic-multimaster-launch
-ros-melodic-multimaster-fkie
+ros-melodic-multimaster-*
 ros-melodic-angels
 ros-melodic-mapserver
