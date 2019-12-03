@@ -24,6 +24,7 @@ sudo -Hu turtle rosdep install --rosdistro melodic --from-paths /home/turtle/Dri
 
 xargs apt install -y  >> /opt/firstrun/apt.log < /opt/firstrun/scripts/20-ros-packages.txt
 
-test -f /opt/firstrun/scripts/nobuildnoinstall || sudo -Hu turtle /opt/firstrun/buildandinstall.sh
+#test -f /opt/firstrun/scripts/nobuildnoinstall || sudo -Hu turtle /opt/firstrun/buildandinstall.sh
+sudo -Hu turtle bash /opt/firstrun/buildandinstall.sh
 
 #sudo -u turtle rosrun turtlebot3_bringup create_udev_rules
