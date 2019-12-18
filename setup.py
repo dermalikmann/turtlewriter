@@ -31,19 +31,16 @@ if base_image_path == '':
 #build = int(input('Should be the project be build on first boot? (0|1) [1]') or 1)
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
 hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
-
-print()
-print('Flashing...')
-
 device_id = str(input('Please insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
 subprocess.run(['sync'])
 
+print()
 
 for x in range(count):
     new_hostname()
 
     input('Please insert new sd card and press <ENTER>')
-
+    print('Flashing...')
     print('    Writing basimage... ', end='')
     sys.stdout.flush()
     with open(os.devnull, 'w') as devnull:
@@ -53,11 +50,14 @@ for x in range(count):
         subprocess.run(['sync'])
     print('Done')
 
+    print('    Remounting Drive...', end='')
     subprocess.run(['partprobe'])
     
     time.sleep(1)
 
     subprocess.run(['mount', device_id + 'p2' if 'mmcblk' in device_id else device_id + '2', tmp_mount_point])
+
+    print('Done')
 
     print('    Copying overlay... ')
 
@@ -98,4 +98,6 @@ for x in range(count):
         f.write('ff02::2 ip6-allrouters\n')
         f.close()
 
-    print('Done')
+    print()
+
+print('Done')

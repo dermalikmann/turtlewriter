@@ -1,4 +1,5 @@
 base.img
+base-armhf.img
 turtlefiles/id_rsa
 turtlefiles/id_rsa.pub
 .vscode
