@@ -1,4 +1,11 @@
 ros-melodic-rosserial-python
+ros-melodic-serial
 ros-melodic-tf
 ros-melodic-tf2
 ros-melodic-navigation
+ros-melodic-robot-upstart
+ros-melodic-urdf
+ros-melodic-xacro
+ros-melodic-multimaster-*
+ros-melodic-angles
+ros-melodic-map-server

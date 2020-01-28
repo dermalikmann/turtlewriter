@@ -2,19 +2,20 @@
 import os
 import sys
 import subprocess
+import time
 
 scriptdir = str(os.path.dirname(os.path.realpath(__file__)))
 
 hostname_prefix = "turtlebot" 
-current_hostname_id = 0
+hostname_id = 1
 current_hostname = ""
 
 def new_hostname():
     global current_hostname
-    global current_hostname_id
+    global hostname_id
     global hostname_prefix
-    current_hostname_id = current_hostname_id + 1
-    current_hostname = hostname_prefix + str(current_hostname_id)
+    current_hostname = hostname_prefix + str(hostname_id)
+    hostname_id = hostname_id + 1
 
 if os.getuid() != 0:
     print('Please run this scipt as root/with sudo.')
@@ -27,17 +28,19 @@ tmp_mount_point = subprocess.check_output('mktemp -d', shell=True).decode("UTF-8
 if base_image_path == '':
     base_image_path = './base.img'
 
+#build = int(input('Should be the project be build on first boot? (0|1) [1]') or 1)
 count = int(input('Please enter how many turtles you want to write [1]: ') or 1)
-current_hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
-
-print()
-print('Flashing...')
-
+hostname_id = int(input('Please enter wich ID should be started with [1]: ') or 1)
 device_id = str(input('Please insert SD card and enter device identifier [/dev/mmcblk0]: ') or '/dev/mmcblk0')
 subprocess.run(['sync'])
 
-for x in range(count):
+print()
 
+for x in range(count):
+    new_hostname()
+
+    input('Please insert new sd card and press <ENTER>')
+    print('Flashing...')
     print('    Writing basimage... ', end='')
     sys.stdout.flush()
     with open(os.devnull, 'w') as devnull:
@@ -46,8 +49,15 @@ for x in range(count):
         #subprocess.run(['dd', 'if=' + base_image_path, 'of=' + device_id, 'bs=4M'])
         subprocess.run(['sync'])
     print('Done')
+
+    print('    Remounting Drive...', end='')
+    subprocess.run(['partprobe'])
     
+    time.sleep(1)
+
     subprocess.run(['mount', device_id + 'p2' if 'mmcblk' in device_id else device_id + '2', tmp_mount_point])
+
+    print('Done')
 
     print('    Copying overlay... ')
 
@@ -56,6 +66,10 @@ for x in range(count):
                 tmp_mount_point + '/'])
 
     print('    Setting file permissions...')
+
+    #if build == 1:
+    #    with (tmp_mount_point + '/opt/firstrun/scripts/nobuildnoinstall', 'w') as bf:
+    #        bf.write('1')
 
     with open('permissions.txt', 'r') as permfile:
         line = permfile.readline().strip()
@@ -66,7 +80,7 @@ for x in range(count):
             subprocess.run(['chown', '-R', owner, tmp_mount_point + path])
             line = permfile.readline().strip()
 
-    print('    Writing hostname... ', end='')
+    print('    Writing new hostname \'' + current_hostname + '\'... ', end='')
     with open(tmp_mount_point + '/etc/hostname', 'w+') as f:
         f.write(current_hostname + '\n')
         f.close()
@@ -84,7 +98,6 @@ for x in range(count):
         f.write('ff02::2 ip6-allrouters\n')
         f.close()
 
-    print('Done')
+    print()
 
-    new_hostname()
-    input('Please insert new sd card and press <ENTER>')
+print('Done')

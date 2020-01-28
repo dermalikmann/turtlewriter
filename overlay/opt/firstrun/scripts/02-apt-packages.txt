@@ -18,5 +18,7 @@ python3-matplotlib
 python3-scipy
 python3-skimage
 python
+libbullet-dev
 python-pip
 python-numpy
+libc6-arm*
